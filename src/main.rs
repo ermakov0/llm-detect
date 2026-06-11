@@ -53,6 +53,7 @@ fn main() -> Result<ExitCode, Box<dyn Error>> {
             .windows(4)
             .any(|window| window.iter().all(|&c| c.is_uppercase()))
             || line.contains("=>")
+            || line.contains("??")
             || line.contains("??=")
             || line.contains("this(")
             || line.contains("===")
@@ -73,12 +74,23 @@ fn main() -> Result<ExitCode, Box<dyn Error>> {
             || line.contains("4. ")
             || line.contains("5. ")
             || line.contains("6. ")
+            || line.contains("1) ")
+            || line.contains("2) ")
+            || line.contains("3) ")
+            || line.contains("4) ")
+            || line.contains("5) ")
+            || line.contains("6) ")
             || line.contains("var")
-            || line.contains("var")
+            || line.contains("decimal")
+            || line.contains("nameof(")
+            || line.contains("while(true)")
+            || line.contains("while (true)")
+            || line.contains("0m")
             || line.contains("select")
             || line.contains("from")
             || line.contains("where")
             || line.contains("orderby")
+            || line.contains("System.Globalization")
             || line.contains("System.Linq")
             || line.contains(".Select(")
             || line.contains(".Where(")
@@ -133,7 +145,8 @@ fn main() -> Result<ExitCode, Box<dyn Error>> {
         let is_detect = line.contains("Console.WriteLine(\"\\n")
             || line.contains("()}")
             || line.contains("new(")
-            || line.contains("<summary>");
+            || line.contains("throw");
+        // || line.contains("<summary>");
 
         if is_detect {
             info!("{}: {line}", line_num + 1);
