@@ -21,6 +21,12 @@ fn init_log() {
 }
 
 fn main() -> Result<ExitCode, Box<dyn Error>> {
+    println!(concat!(
+        env!("CARGO_PKG_NAME"),
+        " ",
+        env!("CARGO_PKG_VERSION")
+    ));
+
     let args: Vec<String> = env::args().collect();
     if args.len() != 2 {
         eprintln!("usage:");
