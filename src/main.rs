@@ -69,6 +69,7 @@ fn main() -> Result<ExitCode, Box<dyn Error>> {
             || line.contains(":F4}")
             || line.contains(":F5}")
             || line.contains(":F6}")
+            || line.contains(":N0}")
             || line.contains("V2")
             || line.contains("var")
             || line.contains("decimal")
