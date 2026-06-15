@@ -86,6 +86,12 @@ fn main() -> Result<ExitCode, Box<dyn Error>> {
             || line.contains("nameof(")
             || line.contains("while(true)")
             || line.contains("while (true)")
+            // || line.contains("while(!int.TryParse(")
+            // || line.contains("while (!int.TryParse(")
+            // || line.contains("while(!double.TryParse(")
+            // || line.contains("while (!double.TryParse(")
+            || line.contains("!int.TryParse(")
+            || line.contains("!double.TryParse(")
             || line.contains("0m")
             || line.contains("select")
             || line.contains("from")
@@ -144,12 +150,14 @@ fn main() -> Result<ExitCode, Box<dyn Error>> {
             count_warn += 1;
         }
 
-        let is_detect = line.contains("Console.WriteLine(\"\\n")
+        let is_detect = line.contains("—")
+            || line.contains("Console.WriteLine(\"\\n")
             || line.contains("()}")
             || line.contains("new(")
             || line.contains("throw")
             || line.contains("try")
-            || line.contains("catch");
+            || line.contains("catch")
+            || line.contains("out");
         // || line.contains("<summary>");
 
         if is_detect {
