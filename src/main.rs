@@ -46,12 +46,12 @@ fn main() -> Result<ExitCode, Box<dyn Error>> {
         }
 
         // C#
-        // TODO  set { weightKg = value >= 0 ? value : 0; }
         let is_detect = line
             .chars()
             .collect::<Vec<char>>()
             .windows(4)
             .any(|window| window.iter().all(|&c| c.is_uppercase()))
+            || (line.contains("?") && line.contains(":"))
             || line.contains("=>")
             || line.contains("??")
             || line.contains("??=")
@@ -68,6 +68,7 @@ fn main() -> Result<ExitCode, Box<dyn Error>> {
             || line.contains(":F4}")
             || line.contains(":F5}")
             || line.contains(":F6}")
+            || line.contains("999")
             || line.contains("1. ")
             || line.contains("2. ")
             || line.contains("3. ")
@@ -134,6 +135,7 @@ fn main() -> Result<ExitCode, Box<dyn Error>> {
         if is_detect {
             warn!("{}: {line}", line_num + 1);
             count_warn += 1;
+            continue;
         }
         if let Some(idx) = line.trim().find("//")
             && idx > 0
@@ -145,7 +147,9 @@ fn main() -> Result<ExitCode, Box<dyn Error>> {
         let is_detect = line.contains("Console.WriteLine(\"\\n")
             || line.contains("()}")
             || line.contains("new(")
-            || line.contains("throw");
+            || line.contains("throw")
+            || line.contains("try")
+            || line.contains("catch");
         // || line.contains("<summary>");
 
         if is_detect {
