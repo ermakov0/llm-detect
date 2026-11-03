@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
+
 use std::env;
 use std::error::Error;
 use std::process::ExitCode;
@@ -45,15 +47,16 @@ fn main() -> Result<ExitCode, Box<dyn Error>> {
             continue;
         }
 
-        // C#
         let is_detect = line
             .chars()
             .collect::<Vec<char>>()
             .windows(4)
             .any(|window| window.iter().all(|&c| c.is_uppercase()))
+            || line.ends_with(' ')
             || (line.contains("?") && line.contains(":"))
+            || line.contains("`")
             || line.contains("=>")
-            || line.contains("->")
+            // || line.contains("->")
             || line.contains("??")
             || line.contains("??=")
             || line.contains("this(")
@@ -169,7 +172,9 @@ fn main() -> Result<ExitCode, Box<dyn Error>> {
             count_warn += 1;
         }
 
-        let is_detect = line.contains("—")
+        let is_detect = false
+            || line.contains('\u{00A0}')  // nbsp
+            || line.contains("\u{2014}")  // mdash
             || line.contains("Console.WriteLine(\"\\n")
             || line.contains("()}")
             || line.contains("new(")

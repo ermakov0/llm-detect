@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
+
 MAIN := $(shell basename $(PWD))
 SOURCES := $(shell find src/ -name '*.rs')
 
