@@ -4,9 +4,9 @@ use std::env;
 use std::error::Error;
 use std::process::ExitCode;
 
-use docx_lite::extract_text;
 use log::LevelFilter;
 use log::{info, warn};
+use rdocx::Document;
 use simplelog::{ColorChoice, ConfigBuilder, TermLogger, TerminalMode};
 
 fn init_log() {
@@ -37,12 +37,14 @@ fn main() -> Result<ExitCode, Box<dyn Error>> {
     }
 
     init_log();
-    let text = extract_text(&args[1])?;
+    let doc = Document::open(&args[1])?;
 
     let mut count_warn = 0;
     let mut count_info = 0;
 
-    for (line_num, line) in text.lines().enumerate() {
+    for (line_num, line) in doc.paragraphs().into_iter().enumerate() {
+        let line = line.text();
+
         if line.trim().is_empty() {
             continue;
         }
@@ -161,14 +163,14 @@ fn main() -> Result<ExitCode, Box<dyn Error>> {
             || line.contains(".PadRight(");
 
         if is_detect {
-            warn!("{}: {line}", line_num + 1);
+            warn!("{}: |{line}|", line_num + 1);
             count_warn += 1;
             continue;
         }
         if let Some(idx) = line.trim().find("//")
             && idx > 0
         {
-            warn!("{}: {line}", line_num + 1);
+            warn!("{}: |{line}|", line_num + 1);
             count_warn += 1;
         }
 
@@ -198,7 +200,7 @@ fn main() -> Result<ExitCode, Box<dyn Error>> {
         // || line.contains("<summary>");
 
         if is_detect {
-            info!("{}: {line}", line_num + 1);
+            info!("{}: |{line}|", line_num + 1);
             count_info += 1;
         }
     }
